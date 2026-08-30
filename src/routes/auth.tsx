@@ -71,20 +71,20 @@ function AuthPage() {
 
         <h1 className="mt-7 text-xl font-semibold">Admin sign in</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Use the email and password provided to you.
+          Use the username and password provided to you.
         </p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="username">Username</Label>
             <Input
-              id="email"
-              type="email"
-              autoComplete="email"
+              id="username"
+              type="text"
+              autoComplete="username"
               required
               maxLength={160}
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
             />
           </div>
           <div className="space-y-1.5">
