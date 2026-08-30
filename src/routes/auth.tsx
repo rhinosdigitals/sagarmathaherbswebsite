@@ -21,9 +21,12 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+const ADMIN_USERNAME = "Admin";
+const ADMIN_EMAIL = "admin@himalayanaturals.com";
+
 function AuthPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(ADMIN_USERNAME);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -35,11 +38,18 @@ function AuthPage() {
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    const entered = username.trim();
+    const email = entered.includes("@")
+      ? entered
+      : entered.toLowerCase() === ADMIN_USERNAME.toLowerCase()
+        ? ADMIN_EMAIL
+        : "";
+    if (!email) {
+      toast.error("Unknown username");
+      return;
+    }
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
       toast.error(error.message);
@@ -61,20 +71,20 @@ function AuthPage() {
 
         <h1 className="mt-7 text-xl font-semibold">Admin sign in</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Use the email and password provided to you.
+          Use the username and password provided to you.
         </p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="username">Username</Label>
             <Input
-              id="email"
-              type="email"
-              autoComplete="email"
+              id="username"
+              type="text"
+              autoComplete="username"
               required
               maxLength={160}
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
             />
           </div>
           <div className="space-y-1.5">
