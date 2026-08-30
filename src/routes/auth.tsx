@@ -21,9 +21,12 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+const ADMIN_USERNAME = "Admin";
+const ADMIN_EMAIL = "admin@himalayanaturals.com";
+
 function AuthPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(ADMIN_USERNAME);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -35,11 +38,18 @@ function AuthPage() {
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    const entered = username.trim();
+    const email = entered.includes("@")
+      ? entered
+      : entered.toLowerCase() === ADMIN_USERNAME.toLowerCase()
+        ? ADMIN_EMAIL
+        : "";
+    if (!email) {
+      toast.error("Unknown username");
+      return;
+    }
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
       toast.error(error.message);
