@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Category, Product } from "@/lib/site-data";
-import { deleteProduct, saveProduct } from "@/lib/site.functions";
+import { deleteProduct, saveProduct, type ProductInput } from "@/lib/site.functions";
 import { formatNpr } from "@/lib/site-config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,7 +49,7 @@ export function ProductsPanel({
   const remove = useServerFn(deleteProduct);
 
   const saveMutation = useMutation({
-    mutationFn: (input: Parameters<typeof saveProduct>[0]["data"]) => save({ data: input }),
+    mutationFn: (input: ProductInput) => save({ data: input }),
     onSuccess: () => {
       toast.success("Product saved");
       setDraft(emptyDraft);

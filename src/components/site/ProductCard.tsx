@@ -3,7 +3,7 @@ import { Leaf } from "lucide-react";
 import { formatNpr } from "@/lib/site-config";
 import type { Product } from "@/lib/site-data";
 
-export function ProductCard({ product, categoryName }: { product: Product; categoryName?: string }) {
+export function ProductCard({ product, categoryName }: { product: Product; categoryName?: string | undefined }) {
   return (
     <article className="card-lift group overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
       <Link
