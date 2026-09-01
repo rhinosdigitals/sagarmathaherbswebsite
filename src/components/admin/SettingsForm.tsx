@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 type Platform = "facebook" | "instagram" | "tiktok";
 const platforms: Platform[] = ["facebook", "instagram", "tiktok"];
@@ -107,14 +108,13 @@ export function SettingsForm({ initialConfig }: { initialConfig: SiteConfig }) {
             onChange={(e) => update((d) => ({ ...d, tagline: e.target.value }))}
           />
         </Field>
-        <Field label="Logo image URL" hint="Leave empty to use the leaf mark.">
-          <Input
-            value={config.logoUrl}
-            maxLength={500}
-            placeholder="https://..."
-            onChange={(e) => update((d) => ({ ...d, logoUrl: e.target.value }))}
-          />
-        </Field>
+        <ImageUploader
+          label="Logo"
+          folder="logo"
+          hint="Leave empty to use the leaf mark. Remember to save settings after uploading."
+          value={config.logoUrl}
+          onChange={(next) => update((d) => ({ ...d, logoUrl: next }))}
+        />
       </Section>
 
       <Section title="Home page" description="Hero content and the three highlight cards.">

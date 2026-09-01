@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 type Draft = {
   id?: string;
@@ -155,16 +156,13 @@ export function ProductsPanel({
             <Label htmlFor="product-show-price">Show price on site</Label>
           </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="product-image">Image URL</Label>
-            <Input
-              id="product-image"
-              value={draft.image_url}
-              maxLength={500}
-              placeholder="https://..."
-              onChange={(e) => setDraft({ ...draft, image_url: e.target.value })}
-            />
-          </div>
+          <ImageUploader
+            label="Product image"
+            folder="products"
+            hint="Remember to save the product after uploading."
+            value={draft.image_url}
+            onChange={(next) => setDraft({ ...draft, image_url: next })}
+          />
 
           <div className="space-y-1.5">
             <Label htmlFor="product-order">Sort order</Label>
