@@ -61,7 +61,6 @@ function HomePage() {
                 {config.home.heroCta || "Explore Products"}
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
-              <WhatsAppLink config={config} className="px-6 py-3" />
             </div>
           </div>
 

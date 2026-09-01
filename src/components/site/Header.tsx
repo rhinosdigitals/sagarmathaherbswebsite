@@ -58,7 +58,6 @@ export function Header({ config }: { config: SiteConfig }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <WhatsAppLink config={config} className="hidden sm:inline-flex" />
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}
