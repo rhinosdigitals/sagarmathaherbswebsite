@@ -76,9 +76,17 @@ function isSafeImageRef(value: string): boolean {
   return /^[A-Za-z0-9/_.-]+$/.test(value) && !value.includes("..");
 }
 
+/** Signed storage URLs round-trip back to the bucket path so they never expire. */
+export function toStorageRef(value: string): string {
+  const match = value.match(
+    new RegExp(`/storage/v1/object/(?:sign|public)/${IMAGE_BUCKET}/([^?]+)`),
+  );
+  return match?.[1] ? decodeURIComponent(match[1]) : value;
+}
+
 export function sanitizeImageRef(value: string | null): string | null {
   if (!value) return null;
-  const trimmed = value.trim();
+  const trimmed = toStorageRef(value.trim());
   if (!trimmed) return null;
   return isSafeImageRef(trimmed) ? trimmed : null;
 }
