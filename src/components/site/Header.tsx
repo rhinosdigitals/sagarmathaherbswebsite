@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Leaf, Menu, X } from "lucide-react";
 import type { SiteConfig } from "@/lib/site-config";
-import { WhatsAppLink } from "./WhatsAppButton";
 
 const navItems = [
   { to: "/", label: "Home" },
@@ -58,7 +57,6 @@ export function Header({ config }: { config: SiteConfig }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <WhatsAppLink config={config} className="hidden sm:inline-flex" />
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}
