@@ -67,16 +67,17 @@ export const saveSiteConfig = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ config: siteConfigSchema }).parse(input))
   .handler(async ({ data, context }) => {
-    const { assertAdmin, validateConfigOrThrow } = await import("./site.server");
+    const { assertAdmin, validateConfigOrThrow, toStorageRef } = await import("./site.server");
     await assertAdmin(context.supabase, context.userId);
-    validateConfigOrThrow(data.config);
+    const config = { ...data.config, logoUrl: toStorageRef(data.config.logoUrl.trim()) };
+    validateConfigOrThrow(config);
 
     const { error } = await context.supabase
       .from("site_settings")
-      .update({ config: data.config })
+      .update({ config })
       .eq("id", "main");
     if (error) throw new Error(error.message);
-    return { ok: true as const, config: parseSiteConfig(data.config) };
+    return { ok: true as const, config: parseSiteConfig(config) };
   });
 
 export const saveCategory = createServerFn({ method: "POST" })
