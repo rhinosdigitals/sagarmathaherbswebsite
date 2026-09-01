@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowRight, Leaf, ShieldCheck, Sprout } from "lucide-react";
 import { siteDataQuery } from "@/lib/site.queries";
 import { ProductCard } from "@/components/site/ProductCard";
+import { WhatsAppLink } from "@/components/site/WhatsAppButton";
 
 export const Route = createFileRoute("/")({
   head: () => ({
