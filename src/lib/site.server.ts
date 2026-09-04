@@ -98,13 +98,22 @@ async function resolveImageRefs(refs: (string | null)[]): Promise<Map<string, st
   );
   const resolved = new Map<string, string>();
   if (paths.length === 0) return resolved;
-  const { data } = await supabaseAdmin.storage
-    .from(IMAGE_BUCKET)
-    .createSignedUrls(paths, SIGNED_URL_TTL);
-  for (const entry of data ?? []) {
-    if (entry.signedUrl && entry.path) resolved.set(entry.path, entry.signedUrl);
+  try {
+    const { data } = await supabaseAdmin.storage
+      .from(IMAGE_BUCKET)
+      .createSignedUrls(paths, SIGNED_URL_TTL);
+    for (const entry of data ?? []) {
+      if (entry.signedUrl && entry.path) resolved.set(entry.path, entry.signedUrl);
+    }
+  } catch (error) {
+    console.error("[site] unable to sign image URLs", error);
   }
   return resolved;
+}
+
+/** Falls back to the built-in defaults so the public site renders without a backend. */
+export function fallbackSiteData(): SiteData {
+  return { config: parseSiteConfig({}), categories: [], products: [] };
 }
 
 export async function loadSiteData({
@@ -113,6 +122,7 @@ export async function loadSiteData({
   includeDisabled: boolean;
 }): Promise<SiteData> {
   const client: Client = includeDisabled ? (supabaseAdmin as Client) : publicClient();
+
 
   const settingsPromise = client.from("site_settings").select("config").eq("id", "main").maybeSingle();
   let categoryQuery = client.from("categories").select("id, name, slug, enabled, sort_order");
