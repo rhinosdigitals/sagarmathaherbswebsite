@@ -37,8 +37,14 @@ export type ProductInput = z.infer<typeof productInput>;
 /* ------------------------------------------------------------------ */
 
 export const getSiteData = createServerFn({ method: "GET" }).handler(async (): Promise<SiteData> => {
-  const { loadSiteData } = await import("./site.server");
-  return loadSiteData({ includeDisabled: false });
+  const { loadSiteData, fallbackSiteData } = await import("./site.server");
+  try {
+    return await loadSiteData({ includeDisabled: false });
+  } catch (error) {
+    // The public website must render even when the backend is unreachable.
+    console.error("[site] falling back to default content", error);
+    return fallbackSiteData();
+  }
 });
 
 /* ------------------------------------------------------------------ */
